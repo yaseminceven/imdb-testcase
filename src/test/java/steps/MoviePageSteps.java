@@ -4,15 +4,18 @@ import base.BaseTest;
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import pages.ImdbMoviePage;
-
+import static stepdefinitions.ImdbCompareInfoStepDefinitions.driver;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MoviePageSteps extends BaseTest {
 
-    RequestSpecification httpRequest = RestAssured.given();
+    RequestSpecification requestSpecification = RestAssured.given();
 
     public MoviePageSteps(WebDriver driver) {
         super(driver);
@@ -34,6 +37,25 @@ public class MoviePageSteps extends BaseTest {
         return findElements(ImdbMoviePage.IMAGES_LINKS);
     }
 
+    public void clickTopCredits() {
+        try {
+            if(driver.findElement(ImdbMoviePage.TOP_CREDITS_LINK).isDisplayed()){
+                clickElement(ImdbMoviePage.TOP_CREDITS_LINK);
+            }
+        }catch (NoSuchElementException exception){
+            exception.printStackTrace();
+        }
+
+    }
+    
+    public List<String> starsListText(List<WebElement> starsWebElement){
+        List<String> starsTextList = new ArrayList<>();
+        for (WebElement element:starsWebElement) {
+            starsTextList.add(element.getText());
+        }
+        return starsTextList;
+    }
+
     public boolean checkStarsInfo(List<String> starsText, List<String> starsSearchText) {
         boolean isStarsSame=false;
         for (String star : starsText) {
@@ -51,7 +73,7 @@ public class MoviePageSteps extends BaseTest {
         List<WebElement> imagesLinks = imagesList();
 
         for (WebElement element : imagesLinks) {
-            Response response = httpRequest.get(element.getAttribute("href"));
+            Response response = requestSpecification.get(element.getAttribute("href")).then().extract().response();
             if (response.getStatusCode() == 200) {
                 isImagesFine = true;
             }

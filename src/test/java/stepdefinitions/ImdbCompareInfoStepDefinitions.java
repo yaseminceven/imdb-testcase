@@ -44,7 +44,7 @@ public class ImdbCompareInfoStepDefinitions{
     }
 
     @Given("User open browser and open the IMDB Page")
-    public void user_open_browser_and_open_the_imdb_page() {
+    public void userOpenBrowserAndOpenTheImdbPage() {
         driver.get(url);
     }
 
@@ -66,12 +66,11 @@ public class ImdbCompareInfoStepDefinitions{
     @And("User click on the link that contains text {string} at Honory Award")
     public void userClickOnTheLinkThatContainsTextAtHonoryAward(String movieName) {
         oscarsPageSteps.clickLinkHonoryAward(movieName);
+        moviePageSteps.clickTopCredits();
         directorText = moviePageSteps.directorInfo();
         writerText = moviePageSteps.writerInfo();
         List<WebElement> starsWebElement = moviePageSteps.starsInfo();
-        for (WebElement element:starsWebElement) {
-            starsText.add(element.getText());
-        }
+        starsText = moviePageSteps.starsListText(starsWebElement);
     }
 
     @When("User returns homepage")
@@ -80,16 +79,14 @@ public class ImdbCompareInfoStepDefinitions{
     }
 
     @When("User search the movie {string}")
-    public void userSearchTheMovie(String movieName) {
+    public void userSearchTheMovie(String movieName){
         homePageSteps.searchMovie(movieName);
         listingPageSteps.clickResult(movieName);
-
+        moviePageSteps.clickTopCredits();
         directorSearchText = moviePageSteps.directorInfo();
         writerSearchText = moviePageSteps.writerInfo();
         List<WebElement> starsWebElement = moviePageSteps.starsInfo();
-        for (WebElement element:starsWebElement) {
-            starsSearchText.add(element.getText());
-        }
+        starsSearchText = moviePageSteps.starsListText(starsWebElement);
     }
 
     @Then("User should see same information about the film and images should not be broken")
