@@ -10,6 +10,7 @@ public class OscarsPageSteps extends BaseTest {
     }
 
     public void clickLinkEventHistory(String yearText) {
+        scroll();
         clickElement(By.xpath("//a[contains(.,'"+yearText+"')]"));
     }
 

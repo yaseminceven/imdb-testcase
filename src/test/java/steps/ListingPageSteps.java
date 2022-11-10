@@ -1,8 +1,8 @@
 package steps;
 
 import base.BaseTest;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import pages.ImdbListingPage;
 
 public class ListingPageSteps extends BaseTest {
     public ListingPageSteps(WebDriver driver) {
@@ -10,10 +10,10 @@ public class ListingPageSteps extends BaseTest {
     }
 
     public void clickResult(String movieName) {
-        if(movieName.equals("The Jazz Singer")){
-            clickElement(ImdbListingPage.SECOND_RESULT);
-        }else{
-            clickElement(ImdbListingPage.THECIRCUS_LINK);
+        try{
+            clickElement(By.xpath("//div[@class='findSection'][contains(.,'Titles')]//a[contains(.,'"+movieName+"')]"));
+        }catch (Exception ignored){
+            clickElement(By.xpath("//li[contains(.,'"+movieName+"')]"));
         }
     }
 }

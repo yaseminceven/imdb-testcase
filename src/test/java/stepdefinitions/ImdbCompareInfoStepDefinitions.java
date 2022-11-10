@@ -1,15 +1,17 @@
 package stepdefinitions;
 
-import io.cucumber.java.AfterAll;
-import io.cucumber.java.BeforeAll;
+import io.cucumber.java.After;
+import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import pages.ImdbMoviePage;
 import steps.HomePageSteps;
 import steps.ListingPageSteps;
@@ -36,10 +38,12 @@ public class ImdbCompareInfoStepDefinitions{
     MoviePageSteps moviePageSteps = new MoviePageSteps(driver);
     OscarsPageSteps oscarsPageSteps = new OscarsPageSteps(driver);
 
-    @BeforeAll
+    @Before
     public static void setUp(){
-        System.setProperty("webdriver.chrome.driver","src/drivers/chromedriver.exe");
-        driver = new ChromeDriver();
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions option = new ChromeOptions();
+        option.addArguments("--incognito");
+        driver = new ChromeDriver(option);
         driver.manage().window().maximize();
     }
 
@@ -94,11 +98,10 @@ public class ImdbCompareInfoStepDefinitions{
         boolean isStarsSame = moviePageSteps.checkStarsInfo(starsText,starsSearchText);
         boolean movieInfoResult = directorText.equals(directorSearchText) && writerText.equals(writerSearchText) && isStarsSame;
         boolean isImagesFine = moviePageSteps.checkImagesStatus();
-
         Assert.assertTrue(movieInfoResult && isImagesFine);
     }
 
-    @AfterAll
+    @After
     public static void tearDown(){
         driver.quit();
     }

@@ -7,8 +7,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.List;
 
-import static stepdefinitions.ImdbCompareInfoStepDefinitions.driver;
-
 public class BaseTest {
     WebDriver driver;
     WebDriverWait wait;
@@ -36,5 +34,10 @@ public class BaseTest {
     }
     public void sendKey(By by, Keys key){
         findElement(by).sendKeys(key);
+    }
+
+    public void scroll(){
+        JavascriptExecutor jse = (JavascriptExecutor)driver;
+        jse.executeScript("window.scrollBy(0,250)");
     }
 }
